@@ -29,16 +29,18 @@ async function fetchPackageInfo(packageName: string, currentVersion: string): Pr
   }
 
   const data = await response.json() as NpmRegistryResponse;
-  const versions = Object.keys(data.versions).sort((a, b) => {
-    const packageATime = data.time[a];
-    const packageBTime = data.time[b];
+  const versions = Object.keys(data.versions)
+    .filter(version => !version.includes('-'))
+    .sort((a, b) => {
+      const packageATime = data.time[a];
+      const packageBTime = data.time[b];
 
-    if (packageATime === undefined || packageBTime === undefined) {
-      throw new Error('No time found for package');
-    }
+      if (packageATime === undefined || packageBTime === undefined) {
+        throw new Error('No time found for package');
+      }
 
-    return new Date(packageATime).getTime() - new Date(packageBTime).getTime();
-  })
+      return new Date(packageATime).getTime() - new Date(packageBTime).getTime();
+    })
 
 
   const currentVersionIndex = versions.indexOf(currentVersion);
