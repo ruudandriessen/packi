@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-const KNOWN_LOCK_FILES = [
+export const KNOWN_LOCK_FILES = [
   'package-lock.json',
   'bun.lock',
 ]
