@@ -1,0 +1,42 @@
+name: release
+
+on:
+  push:
+    tags: ["*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install deps
+        run: bun install
+
+      - name: Update version
+        run: bun ./.github/scripts/set-semver.ts
+
+      - name: Build library
+        run: bun run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: ./dist
+
+      - name: Publish package
+        env:
+          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: bun publish --access public
+        if: ${{ !contains(github.ref, '-') }}
+
+      - name: Publish pre-release package
+        run: bun publish --tag next
+        if: ${{ contains(github.ref, '-') }}
