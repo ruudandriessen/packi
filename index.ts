@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from 'commander';
 import { resolve } from 'path';
 import ora from 'ora';
