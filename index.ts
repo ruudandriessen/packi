@@ -5,6 +5,7 @@ import ora from 'ora';
 import { writeFileSync } from 'fs';
 import chalk from 'chalk';
 import { parseDelegate } from './parsers/delegate.js';
+import { autodetectLockFile } from './util/autodetectLockFile.js';
 
 interface PackageInfo {
   name: string;
@@ -87,9 +88,23 @@ async function fetchPackageInfo(packageName: string, currentVersion: string): Pr
   };
 }
 
-async function analyzePackages(lockFilePath: string, outputPath: string = './output.json') {
+
+
+async function analyzePackages({
+  lockFilePath,
+  outputPath,
+}: {
+  lockFilePath: string | null;
+  outputPath: string | null;
+}) {
   try {
-    let packagesToAnalyze = parseDelegate(lockFilePath);
+
+    const filePath = lockFilePath ?? autodetectLockFile(process.cwd());
+    if (!filePath) {
+      throw new Error('Could not find a supported lock file in the current directory');
+    }
+
+    let packagesToAnalyze = parseDelegate(filePath);
 
     const spinner = ora(`Analyzing package updates (${packagesToAnalyze.length})`).start();
     let packagesFetched = 0;
@@ -140,8 +155,9 @@ async function analyzePackages(lockFilePath: string, outputPath: string = './out
         console.log(`${pkgTag}: Last updated ${chalk.red(timeAgo)}${pkg.next ? ` (${pkg.next.version})` : ''}`);
       });
 
-    // Write package info to output file
-    writeFileSync(outputPath, JSON.stringify(packageInfos, null, 2));
+    if (outputPath) {
+      writeFileSync(outputPath, JSON.stringify(packageInfos, null, 2));
+    }
 
   } catch (error) {
     console.error('Error analyzing packages:', error);
@@ -157,12 +173,12 @@ program
 program
   .command('check')
   .description('Check package update status')
-  .option('-f, --file <path>', 'Path to your lock file', './package-lock.json')
+  .option('-f, --file <path>', 'Path to your lock file')
   .option('-o, --output <path>', 'Output file path', './output.json')
   .action(async (options) => {
-    const lockFilePatg = resolve(options.file);
-    const outputPath = resolve(options.output);
-    await analyzePackages(lockFilePatg, outputPath);
+    const lockFilePath = options.file ? resolve(options.file) : null;
+    const outputPath = options.output ? resolve(options.output) : null;
+    await analyzePackages({ lockFilePath, outputPath });
   });
 
 program.parse();
