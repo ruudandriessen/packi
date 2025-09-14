@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import type { Package } from "../models/Package";
+import { autodetectPackageFile } from "../util/autodetectPackageFile";
 
 interface PackageJson {
     dependencies?: Record<string, string>;
@@ -61,7 +62,12 @@ function findVersionInNextLines(
 export function parseYarnLock(lockPath: string): Package[] {
     try {
         const lockContent = readFileSync(lockPath, "utf-8");
-        const packageJsonPath = lockPath.replace("yarn.lock", "package.json");
+        const packageJsonPath = autodetectPackageFile();
+
+        if (!packageJsonPath) {
+            throw new Error("Package.json not found");
+        }
+
         const packageJsonContent = readFileSync(packageJsonPath, "utf-8");
         const packageJson = JSON.parse(packageJsonContent) as PackageJson;
 
