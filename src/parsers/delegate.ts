@@ -1,19 +1,25 @@
 import type { Package } from "../models/Package";
 import { parseBunLock } from "./bun";
 import { parsePackageLock } from "./npm";
+import { parseYarnLock } from "./yarn";
+import { basename } from "node:path";
 
 export function parseDelegate(lockPath: string): Package[] {
-    const isBunlock =
-        lockPath.includes("bun.lockb") || lockPath.includes("bun.lock");
-    const isNpmLock = lockPath.includes("package-lock.json");
+    try {
+        const fileName = basename(lockPath);
 
-    if (isBunlock) {
-        return parseBunLock(lockPath);
+        switch (fileName) {
+            case "bun.lock":
+                return parseBunLock(lockPath);
+            case "package-lock.json":
+                return parsePackageLock(lockPath);
+            case "yarn.lock":
+                return parseYarnLock(lockPath);
+            default:
+                throw new Error(`Unsupported lock file format: ${fileName}`);
+        }
+    } catch (error) {
+        console.error(`Error parsing lock file ${lockPath}:`, error);
+        return [];
     }
-
-    if (isNpmLock) {
-        return parsePackageLock(lockPath);
-    }
-
-    throw new Error("Unsupported lock file format");
 }
