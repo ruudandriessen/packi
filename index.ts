@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { resolve, dirname, join } from 'path';
+import { resolve } from 'path';
 import ora from 'ora';
 import { parsePackageLock } from './parsers/npm.js';
 import { writeFileSync } from 'fs';
@@ -149,7 +149,6 @@ async function analyzePackages(lockFilePath: string, outputPath: string = './out
 
   } catch (error) {
     console.error('Error analyzing packages:', error);
-    process.exit(1);
   }
 }
 
