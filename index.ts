@@ -86,7 +86,7 @@ async function fetchPackageInfo(packageName: string, currentVersion: string): Pr
   };
 }
 
-async function analyzePackages(lockFilePath: string) {
+async function analyzePackages(lockFilePath: string, outputPath: string = './output.json') {
   try {
     let packagesToAnalyze: { name: string; version: string }[] = [];
 
@@ -144,8 +144,8 @@ async function analyzePackages(lockFilePath: string) {
         console.log(`${pkgTag}: Last updated ${chalk.red(timeAgo)}${pkg.next ? ` (${pkg.next.version})` : ''}`);
       });
 
-    // Write oackage info to output.json file
-    writeFileSync('./output.json', JSON.stringify(packageInfos, null, 2));
+    // Write package info to output file
+    writeFileSync(outputPath, JSON.stringify(packageInfos, null, 2));
 
   } catch (error) {
     console.error('Error analyzing packages:', error);
@@ -162,10 +162,12 @@ program
 program
   .command('check')
   .description('Check package update status')
-  .option('-f, --file <path>', 'Path to package.json file', './package.json')
+  .option('-f, --file <path>', 'Path to your lock file', './package-lock.json')
+  .option('-o, --output <path>', 'Output file path', './output.json')
   .action(async (options) => {
     const lockFilePatg = resolve(options.file);
-    await analyzePackages(lockFilePatg);
+    const outputPath = resolve(options.output);
+    await analyzePackages(lockFilePatg, outputPath);
   });
 
 program.parse();
