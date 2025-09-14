@@ -93,11 +93,14 @@ async function analyzePackages(lockFilePath: string) {
       packagesToAnalyze = lockFilePackages;
     }
 
-    const spinner = ora('Analyzing package updates...').start();
+    const spinner = ora(`Analyzing package updates (${packagesToAnalyze.length})`).start();
+    let packagesFetched = 0;
 
     const packageInfos: PackageInfo[] = await Promise.all(
       packagesToAnalyze.map(async ({ name, version }) => {
         const info = await fetchPackageInfo(name, version);
+        packagesFetched++;
+        spinner.text = `Analyzing package updates (${packagesFetched}/${packagesToAnalyze.length})`;
         return info
       })
     );
