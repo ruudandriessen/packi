@@ -4,17 +4,20 @@ import { parsePackageLock } from "./npm";
 import { parseYarnLock } from "./yarn";
 import { basename } from "node:path";
 
-export function parseDelegate(lockPath: string): Package[] {
+export function parseDelegate(
+    lockPath: string,
+    lockFileContent: string,
+): Package[] {
     try {
         const fileName = basename(lockPath);
 
         switch (fileName) {
             case "bun.lock":
-                return parseBunLock(lockPath);
+                return parseBunLock(lockFileContent);
             case "package-lock.json":
-                return parsePackageLock(lockPath);
+                return parsePackageLock(lockFileContent);
             case "yarn.lock":
-                return parseYarnLock(lockPath);
+                return parseYarnLock(lockPath, lockFileContent);
             default:
                 throw new Error(`Unsupported lock file format: ${fileName}`);
         }

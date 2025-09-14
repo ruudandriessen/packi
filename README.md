@@ -14,9 +14,25 @@ npx roest check
 
 This will analyze your `package-lock.json` file and display package update information.
 
+### Analyze GitHub Repository
+
+You can also analyze any GitHub repository directly. In order to do this, you need to make sure you have the `GITHUB_TOKEN` environment variable set. You can create a new GitHub token [here](https://github.com/settings/personal-access-tokens).
+
+Once you have your token, run the following command:
+
+```bash
+npx roest repo owner/repository
+```
+
+This will find and analyze all lock files in the specified GitHub repository.
+
 ### Command Options
 
-- `-f, --file <path>`: Path to your package-lock.json file (default: `./package-lock.json`)
+#### `check` command
+- `-f, --file <path>`: Path to your lock file (default: auto-detect in current directory)
+- `-o, --output <path>`: Output file path for JSON results (default: `./output.json`)
+
+#### `repo` command
 - `-o, --output <path>`: Output file path for JSON results (default: `./output.json`)
 
 ## Output Format
