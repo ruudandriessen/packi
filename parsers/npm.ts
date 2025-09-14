@@ -1,9 +1,5 @@
 import { readFileSync } from 'fs';
-
-export interface LockFilePackage {
-  name: string;
-  version: string;
-}
+import { Package } from '../models/Package';
 
 interface PackageLockJsonV2 {
   lockfileVersion: 2;
@@ -51,7 +47,7 @@ function parseLockV3(lockData: PackageLockJsonV3) {
     .map(([path, info]) => ({ name: path.replace('node_modules/', ''), version: info.version }));
 }
 
-export function parsePackageLock(lockPath: string): LockFilePackage[] {
+export function parsePackageLock(lockPath: string): Package[] {
   try {
     const lockContent = readFileSync(lockPath, 'utf-8');
     const lockData = JSON.parse(lockContent) as PackageLockJson;

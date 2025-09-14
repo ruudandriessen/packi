@@ -1,9 +1,9 @@
 import { Command } from 'commander';
 import { resolve } from 'path';
 import ora from 'ora';
-import { parsePackageLock } from './parsers/npm.js';
 import { writeFileSync } from 'fs';
 import chalk from 'chalk';
+import { parseDelegate } from './parsers/delegate.js';
 
 interface PackageInfo {
   name: string;
@@ -88,12 +88,7 @@ async function fetchPackageInfo(packageName: string, currentVersion: string): Pr
 
 async function analyzePackages(lockFilePath: string, outputPath: string = './output.json') {
   try {
-    let packagesToAnalyze: { name: string; version: string }[] = [];
-
-    const lockFilePackages = parsePackageLock(lockFilePath);
-    if (lockFilePackages.length > 0) {
-      packagesToAnalyze = lockFilePackages;
-    }
+    let packagesToAnalyze = parseDelegate(lockFilePath);
 
     const spinner = ora(`Analyzing package updates (${packagesToAnalyze.length})`).start();
     let packagesFetched = 0;
