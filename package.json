@@ -3,7 +3,10 @@
   "module": "index.ts",
   "type": "module",
   "bin": {
-    "packi": "./index.ts"
+    "packi": "./dist/packi"
+  },
+  "scripts": {
+    "build": "bun build index.ts --target=node --outfile=dist/packi"
   },
   "devDependencies": {
     "@types/bun": "latest",
