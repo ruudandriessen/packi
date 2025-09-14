@@ -2,25 +2,19 @@ import { writeFileSync } from "node:fs";
 import chalk from "chalk";
 import ora from "ora";
 import { parseDelegate } from "../parsers/delegate";
-import { autodetectLockFile } from "./autodetectLockFile";
 import { fetchPackageInfo } from "./fetchPackageInfo";
 
 export async function analyzePackageFile({
     lockFilePath,
+    lockFileContent,
     outputPath,
 }: {
-    lockFilePath: string | null;
+    lockFilePath: string;
+    lockFileContent: string;
     outputPath: string | null;
 }) {
     try {
-        const filePath = lockFilePath ?? autodetectLockFile(process.cwd());
-        if (!filePath) {
-            throw new Error(
-                "Could not find a supported lock file in the current directory",
-            );
-        }
-
-        const packagesToAnalyze = parseDelegate(filePath);
+        const packagesToAnalyze = parseDelegate(lockFilePath, lockFileContent);
 
         const spinner = ora(
             `Analyzing package updates (${packagesToAnalyze.length})`,
@@ -38,8 +32,7 @@ export async function analyzePackageFile({
 
         spinner.stop();
 
-        console.log("\nPackage Update Analysis:");
-        console.log("========================\n");
+        console.log(`Result for ${chalk.bold(lockFilePath)}:\n`);
 
         packageInfos
             .sort((a, b) => {

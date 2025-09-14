@@ -58,9 +58,11 @@ function findVersionInNextLines(
     return null;
 }
 
-export function parseYarnLock(lockPath: string): Package[] {
+export function parseYarnLock(
+    lockPath: string,
+    lockContent: string,
+): Package[] {
     try {
-        const lockContent = readFileSync(lockPath, "utf-8");
         const packageJsonPath = lockPath.replace("yarn.lock", "package.json");
         const packageJsonContent = readFileSync(packageJsonPath, "utf-8");
         const packageJson = JSON.parse(packageJsonContent) as PackageJson;

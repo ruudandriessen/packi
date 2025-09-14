@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import JSON5 from "json5";
 import type { Package } from "../models/Package";
 
@@ -17,11 +16,10 @@ interface BunLockFile {
     >;
 }
 
-export function parseBunLock(lockPath: string): Package[] {
+export function parseBunLock(lockFileContent: string): Package[] {
     try {
-        const lockContent = readFileSync(lockPath, "utf-8");
         const { workspaces, packages } = JSON5.parse(
-            lockContent,
+            lockFileContent,
         ) as BunLockFile;
 
         const installedDependencies = Object.values(workspaces).flatMap(

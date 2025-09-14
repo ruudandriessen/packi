@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import type { Package } from "../models/Package";
 
 interface PackageLockJsonV2 {
@@ -51,10 +50,9 @@ function parseLockV3(lockData: PackageLockJsonV3) {
         }));
 }
 
-export function parsePackageLock(lockPath: string): Package[] {
+export function parsePackageLock(lockFileContent: string): Package[] {
     try {
-        const lockContent = readFileSync(lockPath, "utf-8");
-        const lockData = JSON.parse(lockContent) as PackageLockJson;
+        const lockData = JSON.parse(lockFileContent) as PackageLockJson;
 
         if (lockData.lockfileVersion === 2) {
             return parseLockV2(lockData);
