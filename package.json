@@ -1,12 +1,12 @@
 {
-  "name": "packi",
+  "name": "roest",
   "module": "index.ts",
   "type": "module",
   "bin": {
-    "packi": "./dist/packi"
+    "roest": "./dist/roest"
   },
   "scripts": {
-    "build": "bun build index.ts --target=node --outfile=dist/packi"
+    "build": "bun build index.ts --target=node --outfile=dist/roest"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -149,7 +149,7 @@ async function analyzePackages(lockFilePath: string, outputPath: string = './out
 
 const program = new Command();
 program
-  .name('packi')
+  .name('roest')
   .description('CLI tool to check how long ago each package in package.json was last updated')
   .version('1.0.0');
 

@@ -1,6 +1,6 @@
-# Packi 📦
+# Roest 📦
 
-A lightweight CLI tool to analyze package freshness in your Node.js or Web projects. Packi helps you identify outdated packages by checking when they were last updated, making it easier to keep your dependencies current and secure.
+A lightweight CLI tool to analyze package freshness in your Node.js or Web projects. Roest - meaning "Rust" in Dutch - helps you identify outdated packages by checking when they were last updated, making it easier to keep your dependencies current and secure.
 
 ## Usage
 
@@ -9,7 +9,7 @@ A lightweight CLI tool to analyze package freshness in your Node.js or Web proje
 Navigate to your project directory and run:
 
 ```bash
-npx packi check
+npx roest check
 ```
 
 This will analyze your `package-lock.json` file and display package update information.
