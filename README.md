@@ -1,6 +1,6 @@
 # Roest 📦
 
-A lightweight CLI tool to analyze package freshness in your Node.js or Web projects. Roest - meaning "Rust" in Dutch - helps you identify outdated packages by checking when they were last updated, making it easier to keep your dependencies current and secure.
+A lightweight, language-agnostic CLI tool to analyze package freshness across different programming languages and package managers. Roest - meaning "Rust" in Dutch - helps you identify outdated packages by checking when they were last updated, making it easier to keep your dependencies current and secure.
 
 ## Usage
 
@@ -12,11 +12,67 @@ Navigate to your project directory and run:
 npx roest check
 ```
 
-This will analyze your `package-lock.json` file and display package update information.
+This will automatically detect and analyze your project's lock files and display package update information.
+
+#### npm (package-lock.json)
+
+For Node.js projects using `npm`:
+
+```bash
+# Install dependencies
+npm install
+
+# Run roest
+npx roest check
+```
+
+#### yarn (yarn.lock)
+
+For JS projects using `yarn`:
+
+```bash
+# Install dependencies
+yarn install
+
+# Run roest
+npx roest check
+```
+
+#### bun (bun.lock)
+
+For JS projects using `bun`:
+
+```bash
+# Install dependencies
+bun install
+
+# Run roest
+npx roest check
+```
+
+#### pip (requirements.txt)
+
+For Python projects using `pip` and `requirements.txt`:
+
+```bash
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install packages from requirements.txt
+pip install -r requirements.txt
+
+# Run roest
+npx roest check
+```
+
+#### conda (environment.yml)
+
+WIP
 
 ### Command Options
 
-- `-f, --file <path>`: Path to your package-lock.json file (default: `./package-lock.json`)
+- `-f, --file <path>`: Path to your lock file (default: auto-detected)
 - `-o, --output <path>`: Output file path for JSON results (default: `./output.json`)
 
 ## Output Format
@@ -41,13 +97,25 @@ The tool also generates a detailed JSON file containing:
 ]
 ```
 
-## Supported Lock File Formats
+## Supported Package Managers
 
-- **npm package-lock.json v2**: Full support
-- **npm package-lock.json v3**: Full support
-- **pnpm**: Planned
-- **bun**: Planned
-- **yarn**: Planned
+### Currently Supported ✅
+- **npm** (package-lock.json v2 & v3)
+- **yarn** (yarn.lock)
+- **bun** (bun.lock)
+- **pip** (requirements.txt)
+
+### Work in Progress 🚧
+- **pnpm** (pnpm-lock.yaml)
+- **C#** (.NET packages)
+- **Python** (additional package managers: poetry, pipenv, conda)
+
+### Future Plans 🔮
+- **Rust** (Cargo.toml)
+- **Go** (go.mod)
+- **Ruby** (Gemfile.lock)
+- **PHP** (composer.lock)
+- **Java** (Maven, Gradle)
 
 ## Development
 
