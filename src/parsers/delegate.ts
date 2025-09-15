@@ -1,6 +1,7 @@
 import type { Package } from "../models/Package";
 import { parseBunLock } from "./bun";
 import { parsePackageLock } from "./npm";
+import { parseRequirementsTxt } from "./pip";
 import { parseYarnLock } from "./yarn";
 import { basename } from "node:path";
 
@@ -15,6 +16,8 @@ export function parseDelegate(lockPath: string): Package[] {
                 return parsePackageLock(lockPath);
             case "yarn.lock":
                 return parseYarnLock(lockPath);
+            case "requirements.txt":
+                return parseRequirementsTxt(lockPath);
             default:
                 throw new Error(`Unsupported lock file format: ${fileName}`);
         }
