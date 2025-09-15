@@ -28,12 +28,19 @@ export async function analyzePackageFile({
         let packagesFetched = 0;
 
         const packageInfos = await Promise.all(
-            packagesToAnalyze.map(async ({ name, version }) => {
-                const info = await fetchPackageInfo(name, version);
-                packagesFetched++;
-                spinner.text = `Analyzing package updates (${packagesFetched}/${packagesToAnalyze.length})`;
-                return info;
-            }),
+            packagesToAnalyze.map(
+                async ({ name, version, registry, latestVersion }) => {
+                    const info = await fetchPackageInfo(
+                        name,
+                        version,
+                        registry,
+                        latestVersion,
+                    );
+                    packagesFetched++;
+                    spinner.text = `Analyzing package updates (${packagesFetched}/${packagesToAnalyze.length})`;
+                    return info;
+                },
+            ),
         );
 
         spinner.stop();
