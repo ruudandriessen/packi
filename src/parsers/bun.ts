@@ -45,7 +45,7 @@ export function parseBunLock(lockPath: string): Package[] {
                     throw new Error("Version is undefined");
                 }
 
-                return { name: path, version };
+                return { name: path, version, registry: "npm" as const };
             });
 
         return result;

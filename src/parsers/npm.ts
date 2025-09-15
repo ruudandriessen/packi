@@ -35,7 +35,11 @@ function parseLockV2(lockData: PackageLockJsonV2) {
 
     return Object.entries(lockData.dependencies)
         .filter(([path]) => installedPackages.includes(path))
-        .map(([path, info]) => ({ name: path, version: info.version }));
+        .map(([path, info]) => ({
+            name: path,
+            version: info.version,
+            registry: "npm" as const,
+        }));
 }
 
 function parseLockV3(lockData: PackageLockJsonV3) {
@@ -48,6 +52,7 @@ function parseLockV3(lockData: PackageLockJsonV3) {
         .map(([path, info]) => ({
             name: path.replace("node_modules/", ""),
             version: info.version,
+            registry: "npm" as const,
         }));
 }
 

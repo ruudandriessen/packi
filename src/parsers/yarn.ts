@@ -95,7 +95,7 @@ export function parseYarnLock(lockPath: string): Package[] {
             const version = findVersionInNextLines(lines, i);
 
             if (version) {
-                packages.push({ name, version });
+                packages.push({ name, version, registry: "npm" as const });
             }
         }
 
